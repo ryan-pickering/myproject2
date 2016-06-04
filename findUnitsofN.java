@@ -16,6 +16,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.BorderLayout;
+import java.lang.NumberFormatException;
 import java.util.*;
 
 public class findUnitsofN extends JFrame{
@@ -34,7 +35,7 @@ public class findUnitsofN extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
 
-		_label = new JLabel("Enter a value of n and press 'Generate'");
+		_label = new JLabel("Enter a value of n > 2 and press 'Generate'");
 		_textField = new JTextField(40);
 		_textArea = new JTextArea(15,40);
 		_textArea.setEditable(false);
@@ -49,16 +50,29 @@ public class findUnitsofN extends JFrame{
 				_textArea.setText("");
 
 				String input = _textField.getText();
-				Integer div = Integer.parseInt(input);
+				try{
+					//check input is integer
+					Integer div = Integer.parseInt(input);
 
-				setOfUnits set = new setOfUnits(div.intValue());
+					// if n = 1 then the only unit is 1 
+					if (div < 2){
+						_textArea.append("Please enter a positive integer greater than 2");
+					}
+					else {
+						//calculate units of the group Z mod n
+						setOfUnits set = new setOfUnits(div.intValue());
 
-				_textArea.append("U(" + div + ") = " + set.getIdSet() + "\n");				
-				_textArea.append("U(" + div + ") has order " + set.getSetofUnits().size() + "\n");
+						_textArea.append("U(" + div + ") = " + set.getIdSet() + "\n");				
+						_textArea.append("U(" + div + ") has order " + set.getSetofUnits().size() + "\n");
 
-				for (Element element : set.getSetofUnits()){ 
-					_textArea.append("ord(" + element.getId() + ") is: " + element.getOrder() + "\n");
-				}	
+						for (Element element : set.getSetofUnits()){ 
+							_textArea.append("ord(" + element.getId() + ") is: " + element.getOrder() + "\n");
+						}	
+					}
+				}
+				catch (NumberFormatException i){
+					_textArea.append("Error: invalid argument. Please try again.");
+				}
 
 				_textField.setText("");		
 			}
